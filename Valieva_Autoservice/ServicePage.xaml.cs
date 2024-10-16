@@ -54,26 +54,26 @@ namespace Valieva_Autoservice
             }
 
             if(ComboType.SelectedIndex == 2) {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 15)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 5 && Convert.ToInt32(p.Discount) < 15)).ToList();
             }
 
             if (ComboType.SelectedIndex == 3)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 30)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 15 && Convert.ToInt32(p.Discount) < 30)).ToList();
             }
 
             if (ComboType.SelectedIndex == 4)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 70)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 30 && Convert.ToInt32(p.Discount) < 70)).ToList();
             }
 
             if (ComboType.SelectedIndex == 5)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) <=100)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 70 && Convert.ToInt32(p.Discount) <=100)).ToList();
             }
 
-            //реализуем поиск данных в листвью при вооде текста в окно поиска
-            currentServices = currentServices.Where(p=>p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            //..     //реализуем поиск данных в листвью при вооде текста в окно поиска
+                 currentServices = currentServices.Where(p=>p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
             //для отображения итогов фильтра и поиска в листвью
             ServiceListView.ItemsSource = currentServices.ToList();
@@ -98,7 +98,7 @@ namespace Valieva_Autoservice
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            Manager.MainFrame.Navigate(new AddEditPage(null)); ///////
         }
 
         private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -119,6 +119,27 @@ namespace Valieva_Autoservice
         private void RButtonDown_Checked(object sender, RoutedEventArgs e)
         {
             UpdateServices();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            //открыть окно редактирования/добавления услуг
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                ValievaAutoserviceEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                ServiceListView.ItemsSource = ValievaAutoserviceEntities.GetContext().Service.ToList();
+            }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            //открыть окно редактирования/добавления услуг
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Service));
         }
     }
 }
