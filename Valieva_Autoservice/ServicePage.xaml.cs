@@ -20,6 +20,11 @@ namespace Valieva_Autoservice
     /// </summary>
     public partial class ServicePage : Page
     {
+        int CountRecords; // кол-во записей в таблице
+        int CountPage; // общее кол-во страниц
+        int CurrentPage = 0; // текущая страница
+        List <Service> CurrentPageList = new List <Service> ();
+        List<Service> TableList;
         public ServicePage()
         {
             InitializeComponent();
@@ -45,35 +50,36 @@ namespace Valieva_Autoservice
             //прописываем фильтрацию по условию задания
             if (ComboType.SelectedIndex == 0)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) <= 100)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 0 && Convert.ToInt32(p.DiscountInt) <= 100)).ToList();
             }
 
             if (ComboType.SelectedIndex == 1)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 5)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 0 && Convert.ToInt32(p.DiscountInt) < 5)).ToList();
             }
 
-            if(ComboType.SelectedIndex == 2) {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 5 && Convert.ToInt32(p.Discount) < 15)).ToList();
+            if (ComboType.SelectedIndex == 2)
+            {
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 5 && Convert.ToInt32(p.DiscountInt) < 15)).ToList();
             }
 
             if (ComboType.SelectedIndex == 3)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 15 && Convert.ToInt32(p.Discount) < 30)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 15 && Convert.ToInt32(p.DiscountInt) < 30)).ToList();
             }
 
             if (ComboType.SelectedIndex == 4)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 30 && Convert.ToInt32(p.Discount) < 70)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 30 && Convert.ToInt32(p.DiscountInt) < 70)).ToList();
             }
 
             if (ComboType.SelectedIndex == 5)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 70 && Convert.ToInt32(p.Discount) <=100)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountInt) >= 70 && Convert.ToInt32(p.DiscountInt) <= 100)).ToList();
             }
 
             //..     //реализуем поиск данных в листвью при вооде текста в окно поиска
-                 currentServices = currentServices.Where(p=>p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            currentServices = currentServices.Where(p => p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
             //для отображения итогов фильтра и поиска в листвью
             ServiceListView.ItemsSource = currentServices.ToList();
@@ -81,7 +87,7 @@ namespace Valieva_Autoservice
             if (RButtonDown.IsChecked.Value)
             {
                 //для отображения итогов фильтра и поиска в листвью по убыванию
-                ServiceListView.ItemsSource = currentServices.OrderByDescending(p=>p.Cost).ToList();
+                ServiceListView.ItemsSource = currentServices.OrderByDescending(p => p.Cost).ToList();
             }
 
             if (RButtonUp.IsChecked.Value)
@@ -140,6 +146,50 @@ namespace Valieva_Autoservice
         {
             //открыть окно редактирования/добавления услуг
             Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Service));
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            //забираем сервис, для которого нажата кнопка "Удалить"
+            var currentService = (sender as Button).DataContext as Service;
+
+            //проверка на возможность удаления
+            var currentClientServices = ValievaAutoserviceEntities.GetContext().ClientService.ToList();
+            currentClientServices = currentClientServices.Where(p => p.ServiceID == currentService.ID).ToList();
+
+            if (currentClientServices.Count != 0) //если есть записи на этот сервис
+                MessageBox.Show("Невозможно выполнить удаление, так как существуют записи на эту услугу");
+
+            else
+            {
+                if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        ValievaAutoserviceEntities.GetContext().Service.Remove(currentService);
+                        ValievaAutoserviceEntities.GetContext().SaveChanges();
+                        //выводим в листвью измененную таблицу Сервис
+                        ServiceListView.ItemsSource = ValievaAutoserviceEntities.GetContext().Service.ToList();
+                        //чтобы применялись фильтры и поиск .если они были на форме изначально
+                        UpdateServices();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
+                }
+            }
+        }
+
+        private void LeftDirButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RightDirButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
