@@ -87,14 +87,22 @@ namespace Valieva_Autoservice
             if (RButtonDown.IsChecked.Value)
             {
                 //для отображения итогов фильтра и поиска в листвью по убыванию
-                ServiceListView.ItemsSource = currentServices.OrderByDescending(p => p.Cost).ToList();
+                currentServices = currentServices.OrderByDescending(p => p.Cost).ToList();
             }
 
             if (RButtonUp.IsChecked.Value)
             {
                 //для отображения итогов фильтра и поиска в листвью по возрастанию
-                ServiceListView.ItemsSource = currentServices.OrderBy(p => p.Cost).ToList();
+                currentServices = currentServices.OrderBy(p => p.Cost).ToList();
             }
+
+            ServiceListView.ItemsSource = currentServices;
+            //
+            TableList = currentServices;
+            //
+            //
+            //
+            ChangePage(0, 0);
 
 
 
@@ -182,14 +190,109 @@ namespace Valieva_Autoservice
             }
         }
 
+        private void ChangePage(int direction, int? selectedPage) //ф-я разделения
+        {
+            //direction - направление
+            //selectedPage - 
+            // 
+
+            CurrentPageList.Clear(); //начальная очистка листа
+            CountRecords = TableList.Count; // определение кол-ва записей во всем списке
+            // определение кол-ва страниц
+            if (CountRecords % 10 > 0)
+            {
+                CountPage = CountRecords / 10 + 1;
+            }
+            else CountPage = CountRecords / 10;
+
+            Boolean Ifupdate = true;
+            // проверка на правильность - если
+            // currentPage (номер текущей страницы) "правильный"
+
+            int min;
+
+            if( selectedPage.HasValue) //проверка на наличие null (мб null)
+            {
+                if ( selectedPage >= 0 && selectedPage <= CountPage)
+                {
+                    CurrentPage = (int)selectedPage;
+                    min = CurrentPage*10+10 < CountRecords ? CurrentPage*10+10 : CountRecords;
+                    for (int i = CurrentPage *10; i < min; i++)
+                    {
+                        CurrentPageList.Add(TableList[i]);
+                    }
+                }
+            }
+            else //если нажата стрелка
+            {
+                switch (direction)
+                {
+                    case 1: // предыдущая страница
+                        if (CurrentPage > 0)
+                        {
+                            CurrentPage--;
+                            min = CurrentPage*10+10<CountRecords ? CurrentPage*10+10 : CountRecords;
+                            for(int i = CurrentPage *10;i < min; i++)
+                            {
+                                CurrentPageList.Add(TableList[i]);
+                            }
+                        }
+                        else
+                        {
+                            Ifupdate = false;
+                        }
+                        break;
+
+                    case 2:
+                        if (CurrentPage < CountPage - 1)
+                        {
+                            CurrentPage++;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                            for (int i = CurrentPage * 10; i < min; i++)
+                            {
+                                CurrentPageList.Add(TableList[i]);
+                            }
+                        }
+                        else
+                        {
+                            Ifupdate = false;
+                        }
+                        break;
+                }
+            }
+            if (Ifupdate)
+            {
+                PageListBox.Items.Clear();
+
+                for(int i = 1; i<=CountPage; i++)
+                {
+                    PageListBox.Items.Add(i);
+                }
+                PageListBox.SelectedIndex = CurrentPage;
+
+                min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                TBCount.Text = min.ToString();
+                TBAllRecords.Text = " из " + CountRecords.ToString();
+
+                ServiceListView.ItemsSource = CurrentPageList;
+                ServiceListView.Items.Refresh();
+            }
+
+        }
+
         private void LeftDirButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ChangePage(1, null);
         }
 
         private void RightDirButton_Click(object sender, RoutedEventArgs e)
         {
+            ChangePage(2, null);
+        }
 
+        private void PageListBox_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ChangePage(0, Convert.ToInt32(PageListBox.SelectedItem.ToString()) - 1);
         }
     }
 }
