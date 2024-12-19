@@ -11,7 +11,8 @@ namespace Valieva_Autoservice
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Windows.Media;
+
     public partial class Service
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -24,16 +25,16 @@ namespace Valieva_Autoservice
         public int ID { get; set; }
         public string Title { get; set; }
         public string MainImagePath { get; set; }
-        public string DurationInSeconds { get; set; }
+        public int DurationInSeconds { get; set; }
         public decimal Cost { get; set; }
-        public Nullable<double> Discount { get; set; }
+        public Nullable <double> Discount { get; set; }
 
         public int DiscountInt
         {
             get
             {
-                if(this.Discount != null) 
-                    return Convert.ToInt32(Discount*100);
+                if (this.Discount != null)
+                    return Convert.ToInt32(Discount * 100);
                 else return 0;
             }
             set
@@ -42,12 +43,48 @@ namespace Valieva_Autoservice
             }
         }
 
-
         public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClientService> ClientService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServicePhoto> ServicePhoto { get; set; }
+
+
+        public string OldCost
+        {
+            get
+            {
+                if (Discount > 0)
+                {
+                    return Cost.ToString();
+                }
+                else return "";
+            }
+        }
+
+        public decimal NewCost
+        {
+            get
+            {
+                if (Discount > 0) 
+                    return ((decimal)Cost - (decimal)Cost * (decimal)Discount);
+                else return (decimal)Cost;
+            }
+        }
+
+        public SolidColorBrush FonStyle
+        {
+            get
+            {
+                if (Discount > 0)
+                {
+
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("LightGreen");
+                }
+                else return (SolidColorBrush)new BrushConverter().ConvertFromString("White");
+            }
+        }
+
     }
 }

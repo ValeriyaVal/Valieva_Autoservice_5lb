@@ -15,11 +15,6 @@ namespace Valieva_Autoservice
     
     public partial class ValievaAutoserviceEntities : DbContext
     {
-        public ValievaAutoserviceEntities()
-            : base("name=ValievaAutoserviceEntities")
-        {
-        }
-
         private static ValievaAutoserviceEntities _context;
 
         public static ValievaAutoserviceEntities GetContext()
@@ -30,6 +25,11 @@ namespace Valieva_Autoservice
             return _context;
         }
 
+        public ValievaAutoserviceEntities()
+            : base("name=ValievaAutoserviceEntities")
+        {
+        }
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

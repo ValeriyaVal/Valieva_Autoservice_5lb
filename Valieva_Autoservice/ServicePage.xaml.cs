@@ -294,5 +294,17 @@ namespace Valieva_Autoservice
         {
             ChangePage(0, Convert.ToInt32(PageListBox.SelectedItem.ToString()) - 1);
         }
+
+        private void EditButton_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SignUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            // открыть окно записи клиента на выбранную услугу
+            Manager.MainFrame.Navigate(new SignUpPage((sender as Button).DataContext as Service));
+
+        }
     }
 }

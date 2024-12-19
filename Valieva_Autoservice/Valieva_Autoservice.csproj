@@ -68,56 +68,59 @@
       <DependentUpon>AddEditPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Client.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ClientService.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentByService.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Gender.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Manager.cs" />
     <Compile Include="Manufacturer.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Product.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ProductPhoto.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ProductSale.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Service.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ServicePage.xaml.cs">
       <DependentUpon>ServicePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ServicePhoto.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tag.cs">
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Valieva_Model.Context.cs">
+    <Compile Include="ValievaModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Valieva_Model.Context.tt</DependentUpon>
+      <DependentUpon>ValievaModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Valieva_Model.cs">
+    <Compile Include="ValievaModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Valieva_Model.tt</DependentUpon>
+      <DependentUpon>ValievaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Valieva_Model.Designer.cs">
+    <Compile Include="ValievaModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Valieva_Model.edmx</DependentUpon>
+      <DependentUpon>ValievaModel.edmx</DependentUpon>
     </Compile>
     <Page Include="AddEditPage.xaml">
       <SubType>Designer</SubType>
@@ -136,6 +139,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ServicePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SignUpPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,12 +170,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <EntityDeploy Include="Valieva_Model.edmx">
+    <EntityDeploy Include="ValievaModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Valieva_Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>ValievaModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Valieva_Model.edmx.diagram">
-      <DependentUpon>Valieva_Model.edmx</DependentUpon>
+    <None Include="ValievaModel.edmx.diagram">
+      <DependentUpon>ValievaModel.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -183,16 +190,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\picture.png" />
-    <Content Include="Valieva_Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Valieva_Model.edmx</DependentUpon>
-      <LastGenOutput>Valieva_Model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Valieva_Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Valieva_Model.edmx</DependentUpon>
-      <LastGenOutput>Valieva_Model.cs</LastGenOutput>
-    </Content>
     <Resource Include="Услуги автосервиса\diz.jpg" />
     <Resource Include="Услуги автосервиса\rulevoe-upravlenie-avtomobilya.jpg" />
     <Resource Include="Услуги автосервиса\transmission.jpg" />
@@ -210,6 +207,18 @@
     <Resource Include="Услуги автосервиса\Топливная система.png" />
     <Resource Include="Услуги автосервиса\Шиномонтаж.jpg" />
     <Resource Include="Услуги автосервиса\Электрика.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ValievaModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ValievaModel.edmx</DependentUpon>
+      <LastGenOutput>ValievaModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ValievaModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ValievaModel.edmx</DependentUpon>
+      <LastGenOutput>ValievaModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

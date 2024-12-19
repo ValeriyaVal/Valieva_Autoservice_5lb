@@ -43,37 +43,58 @@ namespace Valieva_Autoservice
             if (_currentServise.Cost == 0)
                 errors.AppendLine("Укажите стоимость услуги");
 
-            if (_currentServise.Discount == null)
+            if (_currentServise.DiscountInt == null)
                 errors.AppendLine("Укажите скидку");
-            if (_currentServise.Discount > 100)
+
+            if (_currentServise.DiscountInt > 100)
                 errors.AppendLine("Укажите скидку");
-            if (_currentServise.Discount < 0)
+
+            if (_currentServise.DiscountInt < 0)
                 errors.AppendLine("Укажите скидку");
-            if (string.IsNullOrWhiteSpace(_currentServise.DurationInSeconds))
+
+            if (_currentServise.DurationInSeconds == 0)
                 errors.AppendLine("Укажите длительность услуги");
 
-            if(errors.Length > 0)
+            if (_currentServise.DurationInSeconds > 240)
+                errors.AppendLine("Длительность не может быть больше 240 минут");
+
+            if (_currentServise.DurationInSeconds < 0)
+                errors.AppendLine("Длительность не может быть меньше 0");
+
+            if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
             }
 
-            //добавить в контекст текущие значения новой услуги
-            if (_currentServise.ID == 0) 
-                ValievaAutoserviceEntities.GetContext().Service.Add(_currentServise);
+            var allServices = ValievaAutoserviceEntities.GetContext().Service
+                .Where(p => p.Title == _currentServise.Title && p.ID != _currentServise.ID)
+                .ToList();
 
-            //сохранить изменения, если никаких ошибок не получилось при этом
-            try
+            if (allServices.Count == 0)
             {
-                ValievaAutoserviceEntities.GetContext().SaveChanges();
-                MessageBox.Show("Информация сохранена");
-                Manager.MainFrame.GoBack();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+                // Добавить в контекст текущие значения новой услуги
+                if (_currentServise.ID == 0)
+                    ValievaAutoserviceEntities.GetContext().Service.Add(_currentServise);
 
+                // Сохранить изменения
+                try
+                {
+                    ValievaAutoserviceEntities.GetContext().SaveChanges();
+                    MessageBox.Show("Информация сохранена");
+                    Manager.MainFrame.GoBack();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            else
+            {
+                MessageBox.Show("Уже существует такая услуга");
+            }
         }
+
+        
     }
 }

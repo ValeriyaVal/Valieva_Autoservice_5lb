@@ -13,9 +13,9 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Image Source="images/service_logo.png" HorizontalAlignment="Left"></Image>
-        <TextBlock Text="Header" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Text="Автосервис" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden"></Frame>
-        <Button Content="Back" Name="BtnBack" HorizontalAlignment="Right" Margin="5"
+        <Button Content="Назад" Name="BtnBack" HorizontalAlignment="Right" Margin="5"
                 Click="BtnBack_Click"></Button>
         
     </Grid>
